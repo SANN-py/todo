@@ -99,7 +99,7 @@ function renderToDo(customTodos) {
     const h1 = document.createElement("h1");
 
     h1.innerHTML = `
-    <div class="max-w-3xl mx-auto w-full">
+    <div class="max-w-5xl mx-auto w-full">
       <div class="flex flex-col p-4 shadow-md border-l-4 rounded-r-lg mb-4 gap-4
         ${task.completed ? "bg-emerald-100 border-emerald-500" : "bg-white border-blue-500"}">
 
