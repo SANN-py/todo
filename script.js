@@ -102,6 +102,10 @@ function renderToDo() {
                    Complete
                  </button>`
           }
+            <button
+            class="bg-red-100 px-3 py-2 rounded-md">
+            ${task.date}
+          </button>
         </div>
       </div>
     </div>
