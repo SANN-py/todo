@@ -3,82 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Task Manager</title>
     <link href="./src/output.css" rel="stylesheet" />
   </head>
-  <!-- to-do-list -->
-  <!-- 07-Jan-2026
-    finish input/render to do 
-  -->
 
-  <body>
-    <!-- add task -->
-    <div class="min-h-screen bg-slate-50 p-2">
-      <form
-        id="todoForm"
-        class="fixed top-0 left-0 w-full bg-slate-50 shadow-md z-20"
-      >
-        <div class="max-w-4xl mx-auto px-4 py-3">
-          <div class="flex flex-row gap-2 items-center">
+  <body class="bg-slate-50 text-slate-800 antialiased">
+    <header
+      class="sticky top-0 w-full bg-white border-b border-slate-200 z-30 shadow-sm"
+    >
+      <div class="max-w-4xl mx-auto px-4 py-4">
+        <form id="todoForm" class="flex flex-col md:flex-row gap-3">
+          <input
+            type="text"
+            id="to-do-input"
+            placeholder="What needs to be done?"
+            class="flex-1 border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+          <div class="flex gap-2">
+            <input
+              type="date"
+              id="todo-date"
+              class="border border-slate-300 p-3 rounded-lg outline-none text-slate-600"
+            />
+            <button
+              type="submit"
+              id="add-to-do"
+              class="flex-1 md:flex-none px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition-all active:scale-95 whitespace-nowrap"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              id="update-to-do"
+              style="display: none"
+              class="flex-1 md:flex-none px-6 py-3 bg-amber-500 text-white font-bold rounded-lg shadow-md"
+            >
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-4">
+      <div class="bg-slate-50/95 backdrop-blur-sm py-2">
+        <div
+          class="bg-white p-2 px-3 rounded-lg shadow-sm border border-slate-200 flex flex-col md:flex-row items-stretch md:items-center gap-2"
+        >
+          <div class="flex-1 relative">
             <input
               type="text"
-              id="to-do-input"
-              placeholder="Add new task..."
-              class="border p-3 rounded-md flex-1"
+              id="searchInput"
+              placeholder="Search..."
+              class="w-full border border-slate-200 py-1.5 pl-3 rounded-md bg-slate-50 text-sm focus:bg-white outline-none transition-all"
+              oninput="filterTodos()"
             />
-            <div class="flex gap-2 flex-shrink-0">
-              <button
-                type="submit"
-                id="add-to-do"
-                class="px-4 py-3 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm transition-all duration-200 active:scale-95 focus:ring-2 focus:ring-blue-300 outline-none whitespace-nowrap"
-              >
-                Save
-              </button>
+          </div>
 
+          <select
+            id="filterSelect"
+            class="border border-slate-200 py-1.5 px-2 rounded-md bg-slate-50 text-sm outline-none cursor-pointer"
+            onchange="filterTodos()"
+          >
+            <option value="all">All Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+
+          <div class="hidden md:block w-px h-6 bg-slate-200 mx-1"></div>
+
+          <div class="flex items-center gap-2">
+            <input
+              type="date"
+              id="filter-date"
+              class="flex-1 md:w-32 border border-slate-200 py-1.5 px-2 rounded-md bg-slate-50 text-sm outline-none"
+            />
+            <div class="flex gap-1">
               <button
-                type="button"
-                id="update-to-do"
-                onclick="updateTask(event)"
-                style="display: none"
-                class="px-4 py-3 md:px-6 md:py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md shadow-sm transition-all duration-200 active:scale-95 focus:ring-2 focus:ring-amber-300 outline-none whitespace-nowrap"
+                id="filter-date-btn"
+                class="px-3 py-1.5 bg-slate-800 text-black text-xs font-semibold rounded-md hover:bg-black transition-colors"
               >
-                Update
+                Apply
+              </button>
+              <button
+                id="clear-date-filter"
+                class="px-2 py-1.5 text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors"
+              >
+                Clear
               </button>
             </div>
           </div>
         </div>
-      </form>
-
-      <div class="max-w-xl mt-4 sticky top-20 z-10">
-        <div
-          class="bg-white p-4 shadow-sm rounded-sm flex flex-col sm:flex-row gap-3 items-stretch sm:items-center"
-        >
-          <!-- Search -->
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search task..."
-            class="border border-gray-300 p-2 rounded-sm flex-1"
-            oninput="filterTodos()"
-          />
-
-          <!-- Filter -->
-          <select
-            id="filterSelect"
-            class="border border-gray-300 p-2 rounded-sm"
-            onchange="filterTodos()"
-          >
-            <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-          </select>
-        </div>
       </div>
 
-      <div id="to-do-list" class="mt-36 sm:mt-15 h-500 overflow-y-auto">
-        <!-- js goes here (todo list)-->
-      </div>
-    </div>
+      <div id="to-do-list" class="mt-4 space-y-2"></div>
+    </main>
+
     <script src="./script.js"></script>
   </body>
 </html>

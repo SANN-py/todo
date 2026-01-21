@@ -1,4 +1,5 @@
 const inputToDoEl = document.getElementById("to-do-input");
+const dateInputEl = document.getElementById("todo-date");
 const btnAddToDoEl = document.getElementById("add-to-do");
 const btnUpdateToDoEl = document.getElementById("update-to-do");
 const toDoDiv = document.getElementById("to-do-list");
@@ -22,6 +23,14 @@ function reindexTodos() {
     todo.id = index + 1;
   });
 }
+document
+  .getElementById("filter-date-btn")
+  .addEventListener("click", filterByDate);
+document.getElementById("clear-date-filter").addEventListener("click", () => {
+  document.getElementById("filter-date").value = "";
+  renderToDo();
+});
+
 function searchToDo() {}
 function undoCompleted(index) {
   todos[index].completed = false;
@@ -31,6 +40,7 @@ function undoCompleted(index) {
 
 function newTask(event) {
   event.preventDefault();
+  const dateInput = dateInputEl.value;
   const input = inputToDoEl.value.trim();
   if (input === "") {
     alert("please input a task");
@@ -39,7 +49,7 @@ function newTask(event) {
   const to_do_object = {
     id: 0,
     title: input,
-    date: new Date().toLocaleDateString(),
+    date: formatDate(dateInput) || new Date().toLocaleDateString(),
     completed: false,
   };
 
@@ -49,19 +59,40 @@ function newTask(event) {
   renderToDo();
   clearInput();
 }
-function renderToDo() {
+function filterByDate() {
+  const dateValue = document.getElementById("filter-date").value; // YYYY-MM-DD from input
+  if (!dateValue) return renderToDo(); // no filter, show all
+
+  const formattedDate = formatDate(dateValue);
+
+  // Save current filter temporarily
+  const filteredTodos = todos.filter((todo) => todo.date === formattedDate);
+
+  renderToDo(filteredTodos);
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "";
+  const month = date.getMonth() + 1; // months start from 0
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+}
+function renderToDo(customTodos) {
   toDoDiv.innerHTML = "";
 
-  let filteredTodos = [];
-
-  if (currentFilter === "completed") {
-    filteredTodos = todos.filter((todo) => todo.completed);
-  } else if (currentFilter === "pending") {
-    filteredTodos = todos.filter((todo) => !todo.completed);
-  } else {
-    filteredTodos = todos;
+  let filteredTodos = customTodos || [];
+  if (!customTodos) {
+    if (currentFilter === "completed") {
+      filteredTodos = todos.filter((todo) => todo.completed);
+    } else if (currentFilter === "pending") {
+      filteredTodos = todos.filter((todo) => !todo.completed);
+    } else {
+      filteredTodos = todos;
+    }
   }
-
   filteredTodos.forEach((task) => {
     const index = todos.findIndex((t) => t.id === task.id);
 
@@ -102,10 +133,9 @@ function renderToDo() {
                    Complete
                  </button>`
           }
-            <button
-            class="bg-red-100 px-3 py-2 rounded-md">
-            ${task.date}
-          </button>
+          <button class="bg-red-100 px-3 py-2 rounded-md">
+  ${task.date}
+</button>
         </div>
       </div>
     </div>
