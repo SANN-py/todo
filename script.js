@@ -212,7 +212,6 @@ function loadFromLocalStorage() {
 
 function handleSave(event) {
   event.preventDefault();
-
   if (isEdit) {
     updateTask(event);
   } else {
